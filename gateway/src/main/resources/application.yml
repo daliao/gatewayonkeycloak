@@ -51,7 +51,7 @@ spring:
             client-secret: P0rOKMsNno02ntonxLshL1bExTXVz4I6
             authorization-grant-type: authorization_code
             scope: openid, profile, email
-            redirect-uri: "http://192.168.0.100:8880/login/oauth2/code/{registrationId}?"
+            redirect-uri: "/login/oauth2/code/{registrationId}?"
 
 server.port: 8060
 

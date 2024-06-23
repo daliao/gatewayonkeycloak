@@ -35,7 +35,6 @@ public class SecurityConfig {
                 .pathMatchers("/api/callme/public/**").permitAll()
                 .anyExchange().authenticated())
                 .oauth2Login(Customizer.withDefaults())
- //               .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .logout((logout) -> logout.logoutSuccessHandler(oidcLogoutSuccessHandler()));
         return http.build();
     }
@@ -46,7 +45,7 @@ public class SecurityConfig {
 
         // Sets the location that the End-User's User Agent will be redirected to
         // after the logout has been performed at the Provider
-        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://192.168.0.100:8880/");
+        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("/");
 
         return oidcLogoutSuccessHandler;
     }
