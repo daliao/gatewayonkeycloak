@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - RemoveRequestHeader=Cookie
+      routes:
+        - id: callme-service
+          uri: http://localhost:8040
+          predicates:
+            - Path=/api/callme/**
+          filters:
+            - TokenRelay=keycloak
+            - StripPrefix=2
+
+        - id: caller-service
+          uri: http://localhost:8020
+          predicates:
+            - Path=/api/caller/**
+          filters:
+            - TokenRelay=keycloak
+            - StripPrefix=2
+
+        # httpbin with auth for testing
+        - id: httpbin-auth
+          uri: http://httpbin.org
+          predicates:
+            - Path=/api/httpbin/private/**
+          filters:
+            - TokenRelay=keycloak
+            - StripPrefix=3
+
+        # httpbin without auth  for testing
+        - id: httpbin-noauth
+          uri: http://httpbin.org
+          predicates:
+            - Path=/api/httpbin/public/{segment}
+          filters:
+            - SetPath=/{segment}
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.0.100:8080/realms/gwrealm
+        registration:
+          keycloak:
+            client-id: gwclient
+            client-secret: P0rOKMsNno02ntonxLshL1bExTXVz4I6
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+            redirect-uri: "http://192.168.0.100:8880/login/oauth2/code/{registrationId}?"
+
+server.port: 8060
+
+logging.level:
+  org.springframework.cloud.gateway: DEBUG
+  org.springframework.security: DEBUG
+  org.springframework.web.reactive.function.client: TRACE

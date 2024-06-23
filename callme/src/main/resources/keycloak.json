@@ -1,0 +1,18 @@
+{
+  "realm": "gwrealm",
+  "auth-server-url": "http://192.168.0.100:8080/",
+  "resource": "service-callme-client",
+  "credentials": {
+    "secret": "CoqLGJzkR1hvRHLmMYIOlDMSX59PMseZ"
+  },
+  "paths": [
+    {
+      "path": "/public/*",
+      "enforcement-mode": "DISABLED"
+    },
+    {
+      "path": "/error",
+      "enforcement-mode": "DISABLED"
+    }
+  ]
+}
